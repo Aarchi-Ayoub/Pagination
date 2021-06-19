@@ -1,8 +1,6 @@
 import React, { Fragment } from 'react'
-import Card from '@material-ui/core/Card';
-import {CardContent} from '@material-ui/core';
-import { Typography, Button } from '@material-ui/core';
-import { Grid } from '@material-ui/core';
+import { CardContent, Typography, Grid , Card } from '@material-ui/core';
+
 const Cards = ({email, name, body}) => {
     return (
         <Fragment>

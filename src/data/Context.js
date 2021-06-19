@@ -6,10 +6,12 @@ export const Context = createContext();
 const Provider = props => {
     // The state
     const [data,setData]= useState([]);
-    
+    const [loading, setLoading] = useState(false);
     // Getting the data
     const getData = async ()=>{
+        setLoading(true)
         const res = await axios.get('https://jsonplaceholder.typicode.com/comments');
+        setLoading(false)
         return res.data;
     }
 
@@ -19,7 +21,7 @@ const Provider = props => {
     },[]);
 
     return (
-        <Context.Provider value={data}>
+        <Context.Provider value={{ data, loading }}>
             { props.children }
         </Context.Provider>
     )
