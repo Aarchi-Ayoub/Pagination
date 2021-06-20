@@ -6,9 +6,8 @@ import Cards from "../Card";
 import { Container, Grid } from "@material-ui/core";
 import Alert from "@material-ui/lab/Alert";
 
-import InfiniteScroll from "react-infinite-scroll-component";
 import axios from "axios";
-
+import InfiniteScroll from 'react-infinite-scroll-component';
 const Scroll = () => {
   // Getting data
   const { count } = useContext(Context);
@@ -39,48 +38,41 @@ const Scroll = () => {
       .catch((err) => console.error("Failed Network"));
   }, []);
 
-  // Scroll down methode
-  const fetchMoreData = () => {
-    // Have we data or not
-    if (data.length >= count) {
-      setHasMore(false);
-      return;
-    }
-    // Set the start value
-    setTimeout(() => {
-      console.log("is scrolling");
-      setStart(start + 5);
-    }, 500);
-  };
-
-  // Set the new data on scrolling down
-  useEffect(async () => {
-    await getData(start, limit)
-      .then((res) => setData(data.concat(res)))
-      .catch((err) => console.error("Failed Network"));
-  }, [start]);
+ 
   return (
     <Container maxWidth="lg">
       <Grid container spacing={3}>
-        <InfiniteScroll
-          dataLength={count}
-          next={fetchMoreData}
-          hasMore={hasMore}
-          // onScroll={fetchMoreData}
-          scrollThreshold={90}
-          loader={<Alert severity="warning">Please wait!</Alert>}
-          endMessage={<Alert severity="error">No data to fetch </Alert>}
-        >
+          <InfiniteScroll
+            dataLength={data.length}
+            hasMore={hasMore}
+            next={()=> {
+              if (data.length >= count) {
+                setHasMore(false);
+                return;
+              }
+              console.log("Scrolling")
+              setStart(start + 5)
+              getData(start, limit)
+              .then((res) => {
+                setData(data.concat(res))
+                  console.log("is scrolling");
+              })
+              .catch((err) => console.error("Failed Network"));
+            }}
+            loader={<Alert severity="warning">Please wait!</Alert>}
+            endMessage={<Alert severity="error">No data to fetch </Alert>}
+          >
+
           {data.length > 0 &&
             data?.map((comment, index) => (
               <Cards
-                key={index}
-                email={comment.email}
-                name={comment.name}
-                body={comment.body}
+              key={index}
+              email={comment.email}
+              name={comment.name}
+              body={comment.body}
               />
-            ))}
-        </InfiniteScroll>
+              ))}
+          </InfiniteScroll>
       </Grid>
     </Container>
   );
