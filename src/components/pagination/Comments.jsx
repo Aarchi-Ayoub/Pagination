@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react'
 
-import Cards from "./Card";
+import Cards from "../Card";
 
 import { Container, Grid } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert'

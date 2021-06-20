@@ -1,6 +1,6 @@
 import React, { Fragment, useContext, useState } from 'react'
 
-import { Context } from '../data/Context';
+import { Context } from '../../data/Context';
 import Comments from './Comments';
 import Paginate from './Paginate';
 import ReactPaginate from 'react-paginate';

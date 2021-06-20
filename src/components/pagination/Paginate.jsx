@@ -12,7 +12,7 @@ const Paginate = ({pageCount , paginate}) => {
     }
     return (
         <Fragment>
-            <Pagination onChange={ handleChange } defaultPage={2} page={page} count={pageCount} color="primary" showFirstButton showLastButton />
+            <Pagination onChange={ handleChange }  page={page} count={pageCount} color="primary" showFirstButton showLastButton />
         </Fragment>
     )
 }

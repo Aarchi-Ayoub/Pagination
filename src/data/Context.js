@@ -16,8 +16,8 @@ const Provider = props => {
     }
 
     // Set the data in the state on loading the page 
-    useEffect( ()=>{
-        getData().then(res => setData(res)).catch(err=> console.error("Failed Network"))
+    useEffect( async ()=>{
+        await getData().then(res => setData(res)).catch(err=> console.error("Failed Network"))
     },[]);
 
     return (

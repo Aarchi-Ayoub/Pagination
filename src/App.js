@@ -1,10 +1,13 @@
 import React from 'react'
-import Home from './components/Home'
 import Provider from './data/Context'
+import Home from './components/pagination/Home'
+import Scroll from './components/scroll/Scroll'
+
 const App = () => {
   return (
     <Provider>
-      <Home/>
+      {/* <Home/> */}
+      <Scroll/>
 
     </Provider>
   )
