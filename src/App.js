@@ -6,8 +6,9 @@ import Scroll from "./components/scroll/Scroll";
 const App = () => {
   return (
     <Provider>
-      <Home />
-      {/* <Scroll /> */}
+      {/*<Home />*/}
+
+      <Scroll />
     </Provider>
   );
 };

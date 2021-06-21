@@ -60,9 +60,9 @@ const Home = () => {
       .catch((err) => console.error("Failed Network"));
   }, [commentsPerPage]);
 
-  // Set the new data on navigate changes
+  // Set the new data on click in naviagte number
   useEffect(async () => {
-    await getData(start, commentsPerPage)
+    await getData(start, limit)
       .then((res) => {
         setData(res);
       })
