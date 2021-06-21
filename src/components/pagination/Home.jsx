@@ -2,7 +2,6 @@ import React, { Fragment, useContext, useState, useEffect } from "react";
 
 import { Context } from "../../data/Context";
 import Comments from "./Comments";
-import Paginate from "./Paginate";
 import ReactPaginate from "react-paginate";
 
 import { Container, Typography } from "@material-ui/core";
@@ -17,12 +16,21 @@ import axios from "axios";
 
 const Home = () => {
   // Getting data
-  const { count, loading } = useContext(Context);
+  const { count } = useContext(Context);
+  // Comments per a page
+  const [commentsPerPage, setCommentsPerPage] = useState(5);
 
   const [data, setData] = useState([]);
   const [start, setStart] = useState(0);
-  const [limit, setLimit] = useState(5);
+  const [limit, setLimit] = useState(commentsPerPage);
 
+  // Actual page number
+  const [pageNumber, setPageNumber] = useState(0);
+
+  // How manu number in paginate
+  const pageCount = Math.ceil(count / commentsPerPage);
+
+  // Geting data
   const getData = async (debut = start, fin = 5) => {
     const res = await axios.get(
       `https://jsonplaceholder.typicode.com/comments?_start=${debut}&_limit=${fin}`
@@ -37,31 +45,24 @@ const Home = () => {
       .catch((err) => console.error("Failed Network"));
   }, []);
 
-  // Actual page number
-  const [pageNumber, setPageNumber] = useState(0);
-  const [pageNum, setPageNum] = useState(1);
-
-  // Comments per a page
-  const [commentsPerPage, setCommentsPerPage] = useState(5);
-
-  // Page passed
-  const pagesVisited = pageNumber * commentsPerPage;
-
-  // Comments in page
-  const comments = data.slice(pagesVisited, pagesVisited + commentsPerPage);
-
-  // Number in paginate
-  const pageCount = Math.ceil(count / commentsPerPage);
-
-  // Set the number og comments per a page
+  // Set the number of comments per a page
   const changePage = ({ selected }) => {
     setPageNumber(selected);
     setStart(selected * 5);
     // setStart(selected * 10);
     // setLimit(limit + 5);
   };
+
+  // Set the new data on changing the number of comments per page
   useEffect(async () => {
-    await getData(start, limit)
+    await getData(start, commentsPerPage)
+      .then((res) => setData(res))
+      .catch((err) => console.error("Failed Network"));
+  }, [commentsPerPage]);
+
+  // Set the new data on navigate changes
+  useEffect(async () => {
+    await getData(start, commentsPerPage)
       .then((res) => {
         setData(res);
       })
@@ -82,7 +83,9 @@ const Home = () => {
           labelId="demo-customized-select-label"
           id="demo-customized-select"
           value={commentsPerPage}
-          onChange={(e) => setCommentsPerPage(e.target.value)}
+          onChange={(e) => {
+            setCommentsPerPage(e.target.value);
+          }}
           input={<Input />}
         >
           <MenuItem value={5}>5</MenuItem>
@@ -96,20 +99,10 @@ const Home = () => {
     </Container>
   );
 
-  // Indexs
-  const lastIndex = pageNum * commentsPerPage;
-  const firstIndex = lastIndex - commentsPerPage;
-
-  // Methode
-  // const paginate = (page) => {
-  //   setPageNum(page + 1);
-  //   console.log(page);
-  // };
-
   return (
     <Fragment>
       {SelectNumber("React Paginate")}
-      <Comments data={comments} />
+      <Comments data={data} />
       <ReactPaginate
         previousLabel={"Previous"}
         nextLabel={"Next"}
@@ -121,10 +114,6 @@ const Home = () => {
         disabledClassName={"paginationDisabled"}
         activeClassName={"paginationActive"}
       />
-      <hr />
-      {/* {SelectNumber("MUI Paginate")}
-      <Comments data={currentIndex} loading={loading} example={true} /> */}
-      {/* <Paginate pageCount={pageCount} paginate={paginate} /> */}
     </Fragment>
   );
 };
